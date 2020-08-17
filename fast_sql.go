@@ -106,7 +106,7 @@ func (d *DB) BatchInsert(query string, params ...interface{}) (err error) {
 	// If the batch interval has been hit, execute a batch insert
 	if d.batchInserts[query].insertCtr >= d.flushInterval {
 		err = d.flushInsert(d.batchInserts[query])
-	} //if
+	}
 
 	return err
 }
@@ -115,6 +115,8 @@ func (d *DB) BatchInsert(query string, params ...interface{}) (err error) {
 func (d *DB) FlushAll() error {
 	for _, in := range d.batchInserts {
 		if err := d.flushInsert(in); err != nil {
+			// empty batchInserts
+			d.batchInserts = map[string]*insert{}
 			return err
 		}
 	}
