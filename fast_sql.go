@@ -90,7 +90,7 @@ func Open(driverName, dataSourceName string, flushInterval uint) (*DB, error) {
 func (d *DB) BatchInsert(query string, params ...interface{}) (err error) {
 	if _, ok := d.batchInserts[query]; !ok {
 		d.batchInserts[query] = newInsert()
-	} //if
+	}
 
 	// Only split out query the first time Insert is called
 	if d.batchInserts[query].queryPart1 == "" {
@@ -99,7 +99,7 @@ func (d *DB) BatchInsert(query string, params ...interface{}) (err error) {
 
 	d.batchInserts[query].insertCtr++
 
-	// Build VALUES seciton of query and add to parameter slice
+	// Build VALUES section of query and add to parameter slice
 	d.batchInserts[query].values += d.batchInserts[query].queryPart2
 	d.batchInserts[query].bindParams = append(d.batchInserts[query].bindParams, params...)
 
@@ -145,7 +145,7 @@ func (d *DB) flushInsert(in *insert) error {
 	// Executate batch insert
 	if _, err = d.prepstmts[query].Exec(in.bindParams...); err != nil {
 		return err
-	} //if
+	}
 
 	// Reset vars
 	in.values = " VALUES"
